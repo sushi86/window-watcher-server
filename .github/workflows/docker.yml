@@ -25,7 +25,7 @@ jobs:
             - name: Build and Push Docker Image
               uses: docker/build-push-action@v3
               with:
-                file: ./data_pipelines/dataeng_github_metrics/Dockerfile
+                file: ./Dockerfile
                 push: true # Will only build if this is not here
                 tags: |
                     docker.maerkl.net/window-watcher-server:latest
