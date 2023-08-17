@@ -7,6 +7,9 @@ let params = {};
 console.log("try to read env...");
 if (environment == 'production') {
   console.log("using prod env");
+  console.log("private key");
+  console.log(process.env.project_id.replace(/\\n/g, '\n'));
+  console.log(process.env.project_id);
   params = {
     type: process.env.type,
     projectId: process.env.project_id.replace(/\\n/g, '\n'),
