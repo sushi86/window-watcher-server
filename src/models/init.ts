@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin';
-import * as serviceAccount from '../../config/service-account.json';
 import { getFirestore } from "firebase-admin/firestore";
 
 const environment = process.env.NODE_ENV || 'development';
@@ -19,6 +18,7 @@ if (environment == 'production') {
     clientC509CertUrl: process.env.client_x509_cert_url
   }
 } else {
+  const serviceAccount = require('../../config/service-account.json');
   params = {
       type: serviceAccount.type,
       projectId: serviceAccount.project_id,
