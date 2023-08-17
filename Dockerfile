@@ -1,8 +1,31 @@
-FROM node:20.5.1-alpine AS final
+FROM node as builder
+
+# Create app directory
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
+
+# Install app dependencies
+COPY package*.json ./
+
+RUN npm ci
+
 COPY . .
-ENV NODE_ENV=production
-RUN npm install --omit=dev
-CMD [ "npm", "start" ]
+
+RUN npm run build
+
+FROM node:slim
+
+ENV NODE_ENV production
+USER node
+
+# Create app directory
+WORKDIR /app
+
+# Install app dependencies
+COPY package*.json ./
+
+RUN npm ci --production
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 8080
+CMD [ "node", "dist/app.js" ]
