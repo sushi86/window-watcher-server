@@ -22,12 +22,6 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
 
-            - name: Inject Service Account
-              run: 'echo "$FIREBASE_SERVICE_ACCOUNT" > /app/config/service-account.json'
-              shell: bash
-              env:
-                  FIREBASE_SERVICE_ACCOUNT: ${{secrets.FIREBASE_SERVICE_ACCOUNT}}
-
             - name: Build and Push Docker Image
               uses: docker/build-push-action@v3
               with:
