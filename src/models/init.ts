@@ -9,7 +9,7 @@ if (environment == 'production') {
   console.log("using prod env");
   params = {
     type: process.env.type,
-    projectId: Buffer.from(process.env.project_id, 'base64').toString('utf-8'),
+    projectId: process.env.project_id.replace(/\\n/g, '\n'),
     privateKeyId: process.env.private_key_id,
     privateKey: process.env.private_key,
     clientEmail: process.env.client_email,
