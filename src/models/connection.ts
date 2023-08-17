@@ -5,10 +5,15 @@ const COLLECTION_NAME = 'connection';
 
 export class Connection {
     id: string
+    clientId: string
     connectTime: admin.firestore.Timestamp
     disconnectTime: admin.firestore.Timestamp
     duration: number
     
+    constructor(clientId: string) {
+        this.clientId = clientId;
+    }
+
     async saveConnection() {
         console.log("try to save connection");
         this.connectTime = admin.firestore.Timestamp.now();
@@ -42,6 +47,7 @@ export class Connection {
     static converter = {
         toFirestore(con: Connection): admin.firestore.DocumentData {
             return {
+                clientId: con.clientId,
                 connectTime: con.connectTime,
                 disconnectTime: con.disconnectTime,
                 duration: con.duration
@@ -49,7 +55,7 @@ export class Connection {
         },
         fromFirestore(snapshot: admin.firestore.QueryDocumentSnapshot): Connection {
             const data = snapshot.data();
-            return new Connection();
+            return new Connection("rndm");
         }
     }
 }

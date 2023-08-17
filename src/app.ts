@@ -6,8 +6,13 @@ const server = new WebSocket.Server({ port: 8080 });
 
 server.on('connection', (socket: WebSocket) => {
   console.log('Neue Verbindung hergestellt.');
+  console.log(server.upgradeReq.headers);
+
+  const clientId = server.upgradeReq.headers['clientId'] ?? makeid(6);
+
+  console.log("clientId:", clientId);
   
-  const connection = new Connection();
+  const connection = new Connection(clientId);
   connection.saveConnection();
 
   socket.on('message', (message: string) => {
@@ -22,3 +27,15 @@ server.on('connection', (socket: WebSocket) => {
     connection.saveDisconnection();
   });
 });
+
+function makeid(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
