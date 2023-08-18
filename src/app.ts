@@ -4,11 +4,11 @@ import {Connection} from "./models/connection";
 console.log('Server gestartet...');
 const server = new WebSocket.Server({ port: 8080 });
 
-server.on('connection', (socket: WebSocket) => {
+server.on('connection', (socket: WebSocket, req: any) => {
   console.log('Neue Verbindung hergestellt.');
-  console.log(server.upgradeReq.headers);
+  console.log(req.rawHeaders);
 
-  const clientId = server.upgradeReq.headers['clientId'] ?? makeid(6);
+  const clientId = req.rawHeaders['clientId'] ?? makeid(6);
 
   console.log("clientId:", clientId);
   
