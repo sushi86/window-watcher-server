@@ -4,25 +4,23 @@ import {Connection} from "./models/connection";
 console.log('Server gestartet...');
 const server = new WebSocket.Server({ port: 8080 });
 
-server.on('connection', (socket: WebSocket, req: any) => {
+server.on('connection', (ws, req) => {
   console.log('Neue Verbindung hergestellt.');
-  console.log(req.rawHeaders);
-
-  const clientId = req.rawHeaders['clientId'] ?? makeid(6);
-
-  console.log("clientId:", clientId);
+  console.log(`Conn Url ${req.url}`);
+  const urlParams = new URLSearchParams(req.url.replace('/?',''));
+  const clientId = urlParams.get('clientId') ?? makeid(6)
   
   const connection = new Connection(clientId);
   connection.saveConnection();
 
-  socket.on('message', (message: string) => {
+  ws.on('message', (message: string) => {
     console.log(`Nachricht empfangen: ${message}`);
 
     // Hier kannst du auf die empfangene Nachricht reagieren und ggf. Daten an den Client zurückschicken
-    socket.send('Nachricht erhalten.');
+    ws.send('Nachricht erhalten.');
   });
 
-  socket.on('close', () => {
+  ws.on('close', () => {
     console.log('Verbindung geschlossen.');
     connection.saveDisconnection();
   });
